@@ -163,7 +163,7 @@ def create_interactive_map(hartford_gdf):
     # NYC-style heat vulnerability color scheme
     def get_color(vulnerability_level):
         colors = {
-            1: '#000000',  # Black (lowest risk/coolest)
+            1: '#0080ff',  # Bright Blue (lowest risk/coolest)
             2: '#2ca02c',  # Green (low risk) 
             3: '#ff7f0e',  # Orange (moderate risk)
             4: '#d62728',  # Red (high risk)
@@ -248,7 +248,7 @@ def create_interactive_map(hartford_gdf):
                 box-shadow: 0 0 15px rgba(0,0,0,0.2);
                 border-radius: 5px;">
     <h4 style="margin: 0 0 10px 0; color: #333;">Heat Vulnerability Level</h4>
-    <p style="margin: 5px 0; color: #000000;"><i class="fa fa-square" style="color: #000000;"></i> Level 1 - Lowest Risk</p>
+    <p style="margin: 5px 0; color: #0080ff;"><i class="fa fa-square" style="color: #0080ff;"></i> Level 1 - Lowest Risk</p>
     <p style="margin: 5px 0; color: #2ca02c;"><i class="fa fa-square" style="color: #2ca02c;"></i> Level 2 - Low Risk</p>
     <p style="margin: 5px 0; color: #ff7f0e;"><i class="fa fa-square" style="color: #ff7f0e;"></i> Level 3 - Moderate Risk</p>
     <p style="margin: 5px 0; color: #d62728;"><i class="fa fa-square" style="color: #d62728;"></i> Level 4 - High Risk</p>
