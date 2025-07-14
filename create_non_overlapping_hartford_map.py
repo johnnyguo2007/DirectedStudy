@@ -156,10 +156,10 @@ def create_interactive_vulnerability_map(hartford_gdf):
     center_lat = (bounds[1] + bounds[3]) / 2
     center_lon = (bounds[0] + bounds[2]) / 2
     
-    # Create base map with exact same settings as original
+    # Create base map with higher zoom level
     m = folium.Map(
         location=[center_lat, center_lon],
-        zoom_start=12,
+        zoom_start=13,  # Increased from 12 to 13 for more zoom
         tiles=None
     )
     
@@ -187,18 +187,23 @@ def create_interactive_vulnerability_map(hartford_gdf):
         control=True
     ).add_to(m)
     
-    # Define exact same color scheme as original
+    # NYC-style heat vulnerability color scheme (cool to hot)
     def get_color(vulnerability_level):
         colors = {
-            1: '#2E8B57',  # Dark green (lowest risk)
-            2: '#90EE90',  # Light green (low risk) 
-            3: '#FFFF00',  # Yellow (moderate risk)
-            4: '#FFA500',  # Orange (high risk)
-            5: '#FF4500'   # Red-orange (highest risk)
+            1: '#000000',  # Black (lowest risk/coolest)
+            2: '#2ca02c',  # Green (low risk) 
+            3: '#ff7f0e',  # Orange (moderate risk)
+            4: '#d62728',  # Red (high risk)
+            5: '#8b0000'   # Dark Red (highest risk/hottest)
         }
         return colors.get(vulnerability_level, '#808080')
     
-    # Add vulnerability data to map with exact same styling
+    # Create separate feature groups for each vulnerability level to ensure Level 1 draws last
+    level_groups = {}
+    for level in [1, 2, 3, 4, 5]:
+        level_groups[level] = folium.FeatureGroup(name=f'Level {level}')
+    
+    # Add all tracts to their respective feature groups
     for idx, row in hartford_gdf.iterrows():
         # Create popup content exactly like original
         popup_content = f"""
@@ -220,19 +225,32 @@ def create_interactive_vulnerability_map(hartford_gdf):
         # Create tooltip exactly like original
         tooltip_content = f"Tract {row['tract']}: Level {row['vulnerability_index']} Risk"
         
-        # Add tract to map with exact same styling as original
-        folium.GeoJson(
-            row.geometry.__geo_interface__,
-            style_function=lambda x, color=get_color(row['vulnerability_index']): {
-                'fillColor': color,
+        # Add tract to its appropriate feature group
+        # Create a closure to capture the current vulnerability_level
+        def create_style_function(vuln_level):
+            return lambda x: {
+                'fillColor': get_color(vuln_level),
                 'color': 'white',
                 'weight': 1,
                 'fillOpacity': 0.8,
                 'opacity': 0.8
-            },
+            }
+        
+        geojson_layer = folium.GeoJson(
+            row.geometry.__geo_interface__,
+            style_function=create_style_function(row['vulnerability_index']),
             popup=folium.Popup(popup_content, max_width=400),
             tooltip=tooltip_content
-        ).add_to(m)
+        )
+        
+        # Add to the appropriate level group
+        geojson_layer.add_to(level_groups[row['vulnerability_index']])
+    
+    # Add feature groups to map in order: 2, 3, 4, 5, then 1 LAST (so Level 1 is on top)
+    for level in [2, 3, 4, 5]:
+        level_groups[level].add_to(m)
+    # Add Level 1 LAST so it draws on top and stands out more
+    level_groups[1].add_to(m)
     
     # Add exact same title as original
     title_html = '''
@@ -248,20 +266,20 @@ def create_interactive_vulnerability_map(hartford_gdf):
     '''
     m.get_root().html.add_child(folium.Element(title_html))
     
-    # Add exact same legend as original
+    # Add legend with proper width and height to cover header and all 5 levels
     legend_html = '''
     <div style="position: fixed; 
-                bottom: 50px; left: 50px; width: 180px; height: 140px; 
+                bottom: 50px; left: 50px; width: 220px; height: 180px; 
                 background-color: white; border: 2px solid grey; z-index:9999; 
                 font-size: 12px; padding: 10px;
                 box-shadow: 0 0 15px rgba(0,0,0,0.2);
                 border-radius: 5px;">
     <h4 style="margin: 0 0 10px 0; color: #333;">Heat Vulnerability Level</h4>
-    <p style="margin: 5px 0; color: #2E8B57;"><i class="fa fa-square" style="color: #2E8B57;"></i> Level 1 - Lowest Risk</p>
-    <p style="margin: 5px 0; color: #90EE90;"><i class="fa fa-square" style="color: #90EE90;"></i> Level 2 - Low Risk</p>
-    <p style="margin: 5px 0; color: #FFFF00;"><i class="fa fa-square" style="color: #FFFF00;"></i> Level 3 - Moderate Risk</p>
-    <p style="margin: 5px 0; color: #FFA500;"><i class="fa fa-square" style="color: #FFA500;"></i> Level 4 - High Risk</p>
-    <p style="margin: 5px 0; color: #FF4500;"><i class="fa fa-square" style="color: #FF4500;"></i> Level 5 - Highest Risk</p>
+    <p style="margin: 5px 0; color: #000000;"><i class="fa fa-square" style="color: #000000;"></i> Level 1 - Lowest Risk</p>
+    <p style="margin: 5px 0; color: #2ca02c;"><i class="fa fa-square" style="color: #2ca02c;"></i> Level 2 - Low Risk</p>
+    <p style="margin: 5px 0; color: #ff7f0e;"><i class="fa fa-square" style="color: #ff7f0e;"></i> Level 3 - Moderate Risk</p>
+    <p style="margin: 5px 0; color: #d62728;"><i class="fa fa-square" style="color: #d62728;"></i> Level 4 - High Risk</p>
+    <p style="margin: 5px 0; color: #8b0000;"><i class="fa fa-square" style="color: #8b0000;"></i> Level 5 - Highest Risk</p>
     </div>
     '''
     m.get_root().html.add_child(folium.Element(legend_html))
@@ -274,7 +292,7 @@ def create_interactive_vulnerability_map(hartford_gdf):
     
     stats_html = f'''
     <div style="position: fixed; 
-                top: 80px; right: 50px; width: 220px; height: 120px; 
+                top: 80px; right: 50px; width: 220px; height: 140px; 
                 background-color: white; border: 2px solid grey; z-index:9999; 
                 font-size: 11px; padding: 10px;
                 box-shadow: 0 0 15px rgba(0,0,0,0.2);
