@@ -1,0 +1,18 @@
+{
+  "data_source": "NASA MODIS Land Surface Temperature",
+  "product_codes": [
+    "MOD11A1",
+    "MYD11A1"
+  ],
+  "spatial_resolution": "1km",
+  "temporal_resolution": "daily",
+  "target_bounds": {
+    "north": 42.05,
+    "south": 40.95,
+    "east": -71.78,
+    "west": -73.73
+  },
+  "collection_date": "2025-07-14T12:04:37.891260",
+  "access_method": "NASA Earthdata API (requires authentication)",
+  "status": "endpoint_identified"
+}

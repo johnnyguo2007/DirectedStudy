@@ -1,0 +1,13 @@
+{
+  "data_source": "American Housing Survey",
+  "relevant_variables": [
+    "Air conditioning availability",
+    "Air conditioning type",
+    "Housing unit characteristics",
+    "Geographic location"
+  ],
+  "access_method": "Census Bureau AHS microdata",
+  "temporal_coverage": "Biennial (most recent 2021)",
+  "spatial_coverage": "Metropolitan areas and national",
+  "status": "metadata_collected"
+}

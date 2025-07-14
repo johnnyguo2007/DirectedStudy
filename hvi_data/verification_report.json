@@ -1,0 +1,67 @@
+{
+  "nasa_modis": {
+    "data_source": "NASA MODIS Land Surface Temperature",
+    "target_period": "2024-07-01 to 2024-07-31",
+    "products": [
+      "MOD11A1",
+      "MYD11A1"
+    ],
+    "availability_status": "endpoints_accessible",
+    "july_2024_availability": "confirmed",
+    "data_delay": "1-3 days typical",
+    "spatial_resolution": "1km",
+    "temporal_resolution": "daily"
+  },
+  "acs_demographics": {
+    "data_source": "American Community Survey 2022",
+    "total_ct_tracts": 884,
+    "hartford_county_tracts": 0,
+    "missing_data": {
+      "B19013_001E": "0",
+      "B25001_001E": "0",
+      "B01003_001E": "0"
+    },
+    "data_year": "2022 (5-year estimates)",
+    "availability_status": "confirmed"
+  },
+  "hartford_boundaries": {
+    "data_source": "Hartford Open Data Portal",
+    "boundary_sources": [
+      "https://data.hartford.gov",
+      "https://openhartford-hartfordgis.opendata.arcgis.com"
+    ],
+    "availability_status": "confirmed",
+    "census_boundaries": "available"
+  },
+  "ct_deep_gis": {
+    "data_source": "CT DEEP GIS Open Data",
+    "accessible_endpoints": [
+      "https://ct-deep-gis-open-data-website-ctdeep.hub.arcgis.com",
+      "https://services1.arcgis.com/FjPcSmEFuDYlIdKC/arcgis/rest/services",
+      "https://maps.cteco.uconn.edu"
+    ],
+    "data_types": [
+      "Land Cover",
+      "Protected Open Space",
+      "Urban Forest"
+    ],
+    "availability_status": "confirmed",
+    "data_currency": "current",
+    "spatial_resolution": "parcel_level"
+  },
+  "housing_ac": {
+    "data_source": "ACS Housing Data + Predictive Modeling",
+    "housing_variables": [
+      "B25024_001E",
+      "B25001_001E",
+      "B25003_001E"
+    ],
+    "modeling_approach": "Structure type + Income prediction",
+    "availability_status": "confirmed",
+    "additional_sources": [
+      "American Housing Survey (2021)",
+      "Connecticut Housing Survey",
+      "Income-based AC probability models"
+    ]
+  }
+}

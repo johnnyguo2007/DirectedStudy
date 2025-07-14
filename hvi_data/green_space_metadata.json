@@ -1,0 +1,17 @@
+{
+  "data_source": "CT DEEP GIS Open Data",
+  "data_types": [
+    "Land Cover Classification",
+    "Protected Open Space",
+    "Urban Forest Canopy",
+    "Parks and Recreation Areas"
+  ],
+  "endpoints": {
+    "land_cover": "https://ct-deep-gis-open-data-website-ctdeep.hub.arcgis.com/",
+    "protected_lands": "https://services1.arcgis.com/FjPcSmEFuDYlIdKC/arcgis/rest/services/",
+    "urban_forests": "https://www.ct.gov/deep/cwp/view.asp?a=2697&q=322898"
+  },
+  "spatial_resolution": "Parcel level",
+  "collection_date": "2025-07-14T12:04:39.403381",
+  "status": "endpoints_identified"
+}

@@ -1,0 +1,10 @@
+Variable_Code,Description
+B25001_001E,Total Housing Units
+B25003_001E,Total Occupied Housing Units
+B25003_002E,Owner Occupied Housing Units
+B25003_003E,Renter Occupied Housing Units
+B19013_001E,Median Household Income
+B25064_001E,Median Gross Rent
+B08301_001E,Total Commuters
+B01003_001E,Total Population
+B25024_001E,Units in Structure (for AC analysis)
